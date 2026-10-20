@@ -1,0 +1,86 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: '72';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('https://sdk.openui5.org/resources/sap/ui/core/themes/sap_horizon/fonts/72-Regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: '72';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('https://sdk.openui5.org/resources/sap/ui/core/themes/sap_horizon/fonts/72-Bold.woff2') format('woff2');
+}
+@font-face {
+  font-family: '72';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url('https://sdk.openui5.org/resources/sap/ui/core/themes/sap_horizon/fonts/72-Black.woff2') format('woff2');
+}
+@font-face {
+  font-family: '72Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('https://sdk.openui5.org/resources/sap/ui/core/themes/sap_horizon/fonts/72Mono-Regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: '72Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('https://sdk.openui5.org/resources/sap/ui/core/themes/sap_horizon/fonts/72Mono-Bold.woff2') format('woff2');
+}
+
+:root {
+  --color-brand-fg: #2A4D7A;
+  --color-brand-loading: #1A5A9A;
+  --color-not-ready: #B32020;
+  --color-ready: #1A7A1A;
+  --color-warning: #E3B010;
+  --color-brand-border: #EAF1FB;
+  --color-accent-fg: #E4F4FF;
+  --color-error-banner-fg: #FDDEDE;
+  --color-15: #E0F0FF;
+  --color-16: #E8F0FE;
+  --color-19: #FFFFFF;
+  --color-12: #EFC1C1;
+  --color-1: #222222;
+  --color-2: #0000EE;
+  --color-9: #808080;
+  --color-8: #FF0000;
+  --color-7: #767676;
+  --color-10: #A9A9A9;
+  --color-13: #D3D3D3;
+}
+
+html, body, #root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+body { 
+  @apply bg-bg text-ink font-sans antialiased; 
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+}
+
+table { border-collapse: collapse; }
+
+.tab-underline { 
+  @apply border-b-2 border-transparent px-3 pb-3 text-sm text-muted hover:text-ink font-semibold transition-all cursor-pointer whitespace-nowrap; 
+}
+
+.tab-underline.active { 
+  @apply border-primary text-primary font-bold; 
+}

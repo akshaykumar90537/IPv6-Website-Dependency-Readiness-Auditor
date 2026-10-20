@@ -1,0 +1,6 @@
+__pycache__/
+.venv/
+node_modules/
+backend/data/
+*.db
+.pytest_cache/
