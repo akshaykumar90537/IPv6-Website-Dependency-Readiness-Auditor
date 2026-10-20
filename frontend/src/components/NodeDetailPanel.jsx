@@ -26,20 +26,28 @@ export default function NodeDetailPanel({ node, probes }) {
           <div className="text-xs uppercase font-bold text-muted tracking-wider mb-1">Host</div>
           <div className="font-mono text-base font-semibold text-ink break-all">{node.label}</div>
         </div>
-        {[["IPv4", v4], ["IPv6", v6]].map(([fam, p]) => (
-          <div key={fam} className="border-t border-border pt-3">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-bold text-ink">{fam}</span>
-              <StatusBadge value={p?.verdict} />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-t border-border pt-4">
+          {[["IPv4", v4], ["IPv6", v6]].map(([fam, p], idx) => (
+            <div key={fam} className={`flex flex-col ${idx === 1 ? "md:border-l md:border-border md:pl-6" : ""}`}>
+              <div className="flex items-center justify-between mb-2.5 pb-1.5 border-b border-border/60">
+                <span className="text-sm font-bold text-ink">{fam}</span>
+                <StatusBadge value={p?.verdict} />
+              </div>
+              <div className="flex flex-col divide-y divide-border/40">
+                <Stage label="DNS" status={p?.dns_status} />
+                <Stage label="TCP" status={p?.tcp_status} />
+                <Stage label="TLS" status={p?.tls_status} />
+                <Stage label="HTTP" status={p?.http_stage_status} />
+              </div>
+              {p?.http_code != null && <div className="text-sm font-medium text-muted mt-2">HTTP {p.http_code}</div>}
+              {p?.error_detail && (
+                <div className="text-xs sm:text-sm font-mono text-status-red mt-2.5 break-words bg-status-red-bg/50 border border-status-red/20 p-2.5 rounded-lg">
+                  {p.error_detail}
+                </div>
+              )}
             </div>
-            <Stage label="DNS" status={p?.dns_status} />
-            <Stage label="TCP" status={p?.tcp_status} />
-            <Stage label="TLS" status={p?.tls_status} />
-            <Stage label="HTTP" status={p?.http_stage_status} />
-            {p?.http_code != null && <div className="text-sm font-medium text-muted mt-1.5">HTTP {p.http_code}</div>}
-            {p?.error_detail && <div className="text-sm font-mono text-status-red mt-1.5 break-words bg-status-red-bg/50 p-2 rounded">{p.error_detail}</div>}
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     );
   }

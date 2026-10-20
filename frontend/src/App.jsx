@@ -7,20 +7,28 @@ import Footer from "./components/Footer";
 export default function App() {
   const [view, setView] = useState(() => {
     if (typeof window !== "undefined") {
-      if (window.location.hash === "#terms") return "terms";
-      if (window.location.hash === "#privacy") return "privacy";
+      const path = (window.location.pathname || "").toLowerCase();
+      const hash = (window.location.hash || "").toLowerCase();
+      if (hash === "#terms" || path === "/terms") return "terms";
+      if (hash === "#privacy" || path === "/privacy") return "privacy";
     }
     return "dashboard";
   });
 
   useEffect(() => {
-    const handleHash = () => {
-      if (window.location.hash === "#terms") setView("terms");
-      else if (window.location.hash === "#privacy") setView("privacy");
+    const handleRoute = () => {
+      const path = (window.location.pathname || "").toLowerCase();
+      const hash = (window.location.hash || "").toLowerCase();
+      if (hash === "#terms" || path === "/terms") setView("terms");
+      else if (hash === "#privacy" || path === "/privacy") setView("privacy");
       else setView("dashboard");
     };
-    window.addEventListener("hashchange", handleHash);
-    return () => window.removeEventListener("hashchange", handleHash);
+    window.addEventListener("hashchange", handleRoute);
+    window.addEventListener("popstate", handleRoute);
+    return () => {
+      window.removeEventListener("hashchange", handleRoute);
+      window.removeEventListener("popstate", handleRoute);
+    };
   }, []);
 
   const navigate = (newView) => {

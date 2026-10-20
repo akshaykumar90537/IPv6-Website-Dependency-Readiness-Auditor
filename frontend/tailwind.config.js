@@ -4,12 +4,12 @@ export default {
   theme: {
     extend: {
       colors: {
-        bg: "#F4F8FD",
+        bg: "#F8FAFC",
         surface: "#FFFFFF",
-        border: "#D2E2F5",
-        ink: "#222222",
-        muted: "#808080",
-        primary: { DEFAULT: "#2A4D7A", hover: "#1A5A9A" },
+        border: "#E2E8F0",
+        ink: "#0F172A",
+        muted: "#64748B",
+        primary: { DEFAULT: "#2A4D7A", hover: "#1E3A5F" },
         accent: "#1A5A9A",
         brand: {
           fg: "#2A4D7A",
@@ -47,16 +47,17 @@ export default {
         },
       },
       fontFamily: {
-        sans: ["72", "Arial", "Segoe UI", "system-ui", "sans-serif"],
-        mono: ["72Mono", "Courier New", "ui-monospace", "monospace"],
-        serif: ["Times New Roman", "serif"],
+        sans: ["'IBM Plex Sans'", "-apple-system", "BlinkMacSystemFont", "'Segoe UI'", "Roboto", "Helvetica Neue", "Arial", "sans-serif"],
+        mono: ["'IBM Plex Mono'", "ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "monospace"],
       },
       fontSize: {
-        xs: ["13px", "1.4"],
-        sm: ["16px", "1.5"],
-        base: ["19px", "1.5"],
-        lg: ["24px", "1.4"],
-        xl: ["32px", "1.3"],
+        xs: ["12px", { lineHeight: "16px" }],
+        sm: ["14px", { lineHeight: "20px" }],
+        base: ["15px", { lineHeight: "22px" }],
+        lg: ["18px", { lineHeight: "26px" }],
+        xl: ["22px", { lineHeight: "28px" }],
+        "2xl": ["26px", { lineHeight: "32px" }],
+        "3xl": ["32px", { lineHeight: "38px" }],
       },
       boxShadow: {
         sm: "rgba(0, 0, 0, 0.2) 0px 1px 4px 0px",

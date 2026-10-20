@@ -8,7 +8,7 @@ export default function FailuresView({ probes }) {
   return (
     <div className="border border-border rounded-xl shadow-xs overflow-auto max-h-[560px] bg-surface">
       <table className="w-full text-base">
-        <thead className="sticky top-0 bg-bg/95 backdrop-blur-xs border-b border-border text-left text-xs uppercase tracking-wider text-muted font-semibold">
+        <thead className="sticky top-0 bg-[#EAF3FD] border-b border-border text-left text-xs uppercase tracking-wider text-primary font-bold">
           <tr>
             <th className="px-4 py-3.5">Host</th>
             <th className="px-4 py-3.5">Port</th>
