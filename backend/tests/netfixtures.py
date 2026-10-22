@@ -11,9 +11,11 @@ from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.x509.oid import NameOID
 
+import sys
+
 from app.config import settings
 
-CFG = dataclasses.replace(settings, tcp_timeout_s=1.0, tls_timeout_s=1.0, http_timeout_s=1.0)
+CFG = dataclasses.replace(settings, tcp_timeout_s=3.0 if sys.platform == "win32" else 1.0, tls_timeout_s=1.0, http_timeout_s=1.0)
 
 
 def _name(cn):

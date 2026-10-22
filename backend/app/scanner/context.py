@@ -8,6 +8,7 @@ import ipaddress
 import json
 import logging
 import socket
+import sys
 import time
 from dataclasses import asdict, dataclass, field
 from typing import Awaitable, Callable
@@ -83,17 +84,27 @@ def _read(path: str) -> str | None:
 
 def _fill_resolvers(ctx: ScanContext, resolv_conf: str, systemd_resolv: str) -> None:
     text = _read(resolv_conf)
-    if text is None:
-        return
-    ips = parse_nameservers(text)
-    if not ips:
-        return
-    ctx.resolver_ips, ctx.resolver_source = ips, resolv_conf
-    ctx.resolver_is_local_stub = any(ipaddress.ip_address(i.split("%")[0]).is_loopback for i in ips)
-    if ctx.resolver_is_local_stub:
-        up = _read(systemd_resolv)  # real upstreams behind systemd-resolved's 127.0.0.53 stub
-        if up:
-            ctx.resolver_upstream_ips = parse_nameservers(up)
+    if text is not None:
+        ips = parse_nameservers(text)
+        if ips:
+            ctx.resolver_ips, ctx.resolver_source = ips, resolv_conf
+            ctx.resolver_is_local_stub = any(ipaddress.ip_address(i.split("%")[0]).is_loopback for i in ips)
+            if ctx.resolver_is_local_stub:
+                up = _read(systemd_resolv)  # real upstreams behind systemd-resolved's 127.0.0.53 stub
+                if up:
+                    ctx.resolver_upstream_ips = parse_nameservers(up)
+            return
+
+    if resolv_conf == RESOLV_CONF:
+        try:
+            import dns.resolver
+            r = dns.resolver.Resolver(configure=True)
+            if r.nameservers:
+                ctx.resolver_ips = [str(ns) for ns in r.nameservers]
+                ctx.resolver_source = "system-registry" if sys.platform == "win32" else "system-resolver"
+                ctx.resolver_is_local_stub = any(ipaddress.ip_address(i.split("%")[0]).is_loopback for i in ctx.resolver_ips)
+        except Exception:
+            pass
 
 
 # ---------- network primitives (injectable for tests) ----------

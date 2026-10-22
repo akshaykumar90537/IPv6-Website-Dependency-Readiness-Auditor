@@ -4,7 +4,7 @@ import { defineConfig } from "vite";
 export default defineConfig({
   base: "./",
   plugins: [react()],
-  server: { port: 5173 },
+  server: { port: 5173, host: true },
   test: {
     environment: "jsdom",
     globals: true,

@@ -60,5 +60,8 @@ class Settings:
     # Needed when Chromium runs as root inside a container.
     chromium_no_sandbox: bool = os.getenv("AUDITOR_CHROMIUM_NO_SANDBOX", "0") == "1"
 
+    # CORS allowlist (comma-separated origins)
+    cors_origins: tuple[str, ...] = _csv("AUDITOR_CORS_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173")
+
 
 settings = Settings()

@@ -10,7 +10,7 @@ export function useBatchPolling() {
   const [error, setError] = useState(null);
   const timer = useRef(null);
 
-  const stop = () => { if (timer.current) clearInterval(timer.current); timer.current = null; };
+  const stop = () => { if (timer.current) clearTimeout(timer.current); timer.current = null; };
 
   async function loadSites(batchId) {
     try {
@@ -25,14 +25,21 @@ export function useBatchPolling() {
       const created = await api.startBatch(sitesOverride, includeControlled);
       setBatch(created);
       await loadSites(created.batch_id);  // the full planned site list exists immediately (Phase 6)
-      timer.current = setInterval(async () => {
-        try {
-          const updated = await api.getBatch(created.batch_id);
-          setBatch(updated);
-          await loadSites(created.batch_id);  // refresh per-site statuses as they land
-          if (BATCH_TERMINAL_STATUSES.has(updated.status)) stop();
-        } catch (e) { setError(e.message); stop(); }
-      }, 1500);
+      const scheduleNext = () => {
+        timer.current = setTimeout(async () => {
+          try {
+            const updated = await api.getBatch(created.batch_id);
+            setBatch(updated);
+            await loadSites(created.batch_id);  // refresh per-site statuses as they land
+            if (BATCH_TERMINAL_STATUSES.has(updated.status)) {
+              stop();
+            } else {
+              scheduleNext();
+            }
+          } catch (e) { setError(e.message); stop(); }
+        }, 1500);
+      };
+      scheduleNext();
     } catch (e) { setError(e.message); }
   }
 

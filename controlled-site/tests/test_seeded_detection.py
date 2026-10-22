@@ -32,7 +32,7 @@ from app.config import settings  # noqa: E402
 from app.scanner import ssrf_guard as sg  # noqa: E402
 from app.scanner.family_probe import probe_family  # noqa: E402
 
-CFG = dataclasses.replace(settings, tcp_timeout_s=2, tls_timeout_s=2, http_timeout_s=2)
+CFG = dataclasses.replace(settings, tcp_timeout_s=3, tls_timeout_s=3, http_timeout_s=3)
 
 
 def free_port() -> int:
@@ -69,7 +69,27 @@ class SeededServer:
             cmd += ["--scheme", "https", "--cert", str(CERT), "--key", str(KEY)]
         proc = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         self.procs.append(proc)
-        time.sleep(0.4)
+
+        # Wait until v4 origin is listening
+        deadline = time.time() + 5.0
+        while time.time() < deadline:
+            try:
+                s = socket.create_connection(("127.0.0.1", port), timeout=0.1)
+                s.close()
+                break
+            except OSError:
+                time.sleep(0.05)
+
+        # If v6 listening is expected, wait for v6 origin as well
+        if with_v6 and v6_mode != "tcp_fail":
+            deadline = time.time() + 5.0
+            while time.time() < deadline:
+                try:
+                    s = socket.create_connection(("127.0.0.2", port), timeout=0.1)
+                    s.close()
+                    break
+                except OSError:
+                    time.sleep(0.05)
         return port
 
     def stop_all(self):

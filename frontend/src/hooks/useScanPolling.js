@@ -13,7 +13,7 @@ export function useScanPolling() {
   const [error, setError] = useState(null);
   const timer = useRef(null);
 
-  const stop = () => { if (timer.current) clearInterval(timer.current); timer.current = null; };
+  const stop = () => { if (timer.current) clearTimeout(timer.current); timer.current = null; };
 
   async function loadFinalData(scanId) {
     try {
@@ -30,16 +30,21 @@ export function useScanPolling() {
       loadFinalData(initialScan.scan_id);
       return;
     }
-    timer.current = setInterval(async () => {
-      try {
-        const updated = await api.getScan(initialScan.scan_id);
-        setScan(updated);
-        if (TERMINAL_STATUSES.has(updated.status)) {
-          stop();
-          await loadFinalData(updated.scan_id);
-        }
-      } catch (e) { setError(e.message); stop(); }
-    }, 1500);
+    const scheduleNext = () => {
+      timer.current = setTimeout(async () => {
+        try {
+          const updated = await api.getScan(initialScan.scan_id);
+          setScan(updated);
+          if (TERMINAL_STATUSES.has(updated.status)) {
+            stop();
+            await loadFinalData(updated.scan_id);
+          } else {
+            scheduleNext();
+          }
+        } catch (e) { setError(e.message); stop(); }
+      }, 1500);
+    };
+    scheduleNext();
   }
 
   async function start(url) {
