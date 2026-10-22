@@ -25,4 +25,11 @@ describe("Footer Component", () => {
     fireEvent.click(privacyLink);
     expect(onNav).toHaveBeenCalledWith("privacy");
   });
+
+  it("renders contributors link pointing to GitHub repository", () => {
+    render(<Footer onNavigate={() => {}} />);
+    const link = screen.getByRole("link", { name: "IPv6 Web Resource Checker contributors" });
+    expect(link).toHaveAttribute("href", "https://github.com/akshaykumar90537/A3-PS027-TC039");
+    expect(link).toHaveAttribute("target", "_blank");
+  });
 });
