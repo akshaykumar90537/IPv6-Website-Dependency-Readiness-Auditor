@@ -8,7 +8,7 @@
 [![Vite](https://img.shields.io/badge/Vite-5.4-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Playwright](https://img.shields.io/badge/Playwright-Chromium%20CDP-2EAD33?logo=playwright&logoColor=white)](https://playwright.dev/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.4-38B2AC?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
-[![SQLite](https://img.shields.io/badge/SQLite-SQLAlchemy%202.0-003B57?logo=sqlite&logoColor=white)](https://www.sqlite.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-SQLAlchemy%202.0-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 [![Tests](https://img.shields.io/badge/Tests-220%20Passing-brightgreen?logo=pytest&logoColor=white)](file:///d:/Full%20Stack%20Projects/A3-PS027-TC039/README.md#testing--quality-assurance)
 [![AIORI-3](https://img.shields.io/badge/AIORI--3-PS--027-orange?logo=target&logoColor=white)](#license--acknowledgments)
 
@@ -102,7 +102,7 @@ The application is structured into decoupled, resilient tiers designed for high-
 | | **Dependency Graph Builder** | Synthesizes resource records and initiator metadata into directed graph structures compatible with ReactFlow. |
 | | **SSRF Guard** | Multi-layer firewall blocking loopbacks, RFC 1918/4193 subnets, link-local, NAT64 translations, and DNS rebinding attacks. |
 | | **Measurement Context Collector** | Collects public egress IPs, Geo-IP data via `ipinfo.io`, and recursive DNS resolver telemetry. |
-| **Data Layer** | **SQLAlchemy 2.0** | Relational ORM supporting SQLite (default) and PostgreSQL with strict foreign keys and thread-safe sessions. |
+| **Data Layer** | **SQLAlchemy 2.0** | Relational ORM backed by PostgreSQL with strict foreign keys, concurrent connection pooling, and ACID transaction isolation. |
 | | **Tables** | `Scan`, `Resource`, `HostProbe`, `MeasurementContext`, `Batch`, and `BatchSite`. |
 | **External Systems** | **Target Websites** | Arbitrary user-submitted domains and the 30 standard AIORI benchmark websites. |
 | | **Controlled Test Site** | Local/public seeded test server (`controlled-site/server/seed_server.py`) serving deterministic failure modes for ground-truth validation. |
@@ -150,7 +150,7 @@ Every audit follows a deterministic, 8-phase pipeline ensuring deep protocol cov
    - The two protocol paths are directly contrasted to produce a `family_comparison`: `BOTH_OK`, `IPV6_BROKEN`, `IPV4_BROKEN`, `BOTH_BROKEN`, or `INCONCLUSIVE`.
 
 8. **Persistence, Reporting & Interactive Visualization**:
-   - All scan artifacts, probes, and metrics are committed to SQLite/PostgreSQL.
+   - All scan artifacts, probes, and metrics are committed to the PostgreSQL database.
    - The **Report Generator** compiles downloadable JSON and CSV reports with sensitive token redaction.
    - The **React Dashboard** renders the interactive ReactFlow dependency graph, broken IPv6 asset callouts, and latency comparison matrices.
 
@@ -261,7 +261,7 @@ The batch audit engine processes these sites concurrently, generating comparativ
                                     │
 ┌───────────────────────────────────▼────────────────────────────────────┐
 │                            DATA & STORAGE                              │
-│   SQLite (Default Local)  •  PostgreSQL (Production Dual-Stack)        │
+│   PostgreSQL (Primary Database)  •  SQLAlchemy 2.0 + psycopg2          │
 └────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -333,7 +333,7 @@ A3-PS027-TC039/
 │   ├── decisions.md                 # Detailed architectural decision record
 │   ├── security-audit.md            # Comprehensive security audit report
 │   └── A3-PS027-TC039_Technical_Report.html # Slide presentation & technical report
-├── data/                            # Default SQLite database directory
+├── data/                            # Local database cache / schema exports
 ├── start.py                         # Unified cross-platform runner (FastAPI + Vite)
 ├── start.sh                         # Linux / macOS shell launcher
 ├── start.ps1                        # Windows PowerShell launcher
@@ -422,7 +422,7 @@ Settings are managed via Pydantic settings in `backend/app/config.py` and can be
 
 | Variable | Default Value | Description |
 |---|---|---|
-| `AUDITOR_DB_URL` | `sqlite:///./data/auditor.db` | SQLAlchemy database URI (SQLite or PostgreSQL). |
+| `AUDITOR_DB_URL` | `postgresql+psycopg2://...` | SQLAlchemy database URI for PostgreSQL (e.g., `postgresql+psycopg2://postgres@127.0.0.1:5432/auditor_db`). |
 | `AUDITOR_MAX_RESOURCES` | `400` | Maximum network resources captured per scan. |
 | `AUDITOR_PAGE_TIMEOUT_MS` | `30000` | Playwright browser page navigation timeout (ms). |
 | `AUDITOR_IDLE_TIMEOUT_MS` | `8000` | Network idle wait timeout after page load (ms). |
@@ -533,7 +533,7 @@ The auditor is built for deployment on dual-stack cloud servers (e.g., Ubuntu 22
 
 1. **System Requirements**: Dual-stack network interface with routable public IPv4 and IPv6 addresses.
 2. **Reverse Proxy (Nginx / Caddy)**: Forward API requests (`/api/*`) to FastAPI (`http://127.0.0.1:8000`) and serve the compiled static frontend (`frontend/dist/`).
-3. **Database Migration**: Switch `AUDITOR_DB_URL` from SQLite to PostgreSQL for high-concurrency production deployments.
+3. **Database**: High-throughput PostgreSQL database with dedicated connection pooling for concurrent batch audits across all workers.
 4. **Dedicated Guide**: See [`deploy/DEPLOY.md`](file:///d:/Full%20Stack%20Projects/A3-PS027-TC039/deploy/DEPLOY.md) for full systemd service configurations, Nginx reverse proxy blocks, and egress firewall rules.
 
 ---
