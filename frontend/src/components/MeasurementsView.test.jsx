@@ -40,4 +40,19 @@ describe("MeasurementsView", () => {
     expect(screen.queryAllByText("Unknown")).toHaveLength(1);  // only scanner_public_ipv6 is genuinely unknown here
     expect(screen.getByText(/NOT_TESTED/)).toBeInTheDocument();
   });
+
+  it("does not crash when warnings is a non-array value (e.g. string from API)", () => {
+    // The backend display() converts empty warnings [] -> "Unknown" string.
+    // The component must not call .map() on a string; it should treat non-arrays as empty.
+    const context = {
+      resolver_ips: "Unknown", resolver_upstream_ips: "Unknown", resolver_is_local_stub: "Unknown",
+      resolver_egress_ip: "Unknown", ipv4_egress_ok: "Unknown", ipv6_egress_ok: "Unknown",
+      scanner_public_ipv4: "Unknown", scanner_public_ipv6: "Unknown",
+      geo_country: "Unknown", geo_region: "Unknown", geo_city: "Unknown", geo_org: "Unknown",
+      geo_source: "Unknown",
+      warnings: "Unknown",
+    };
+    render(<MeasurementsView context={context} />);
+    expect(screen.getByText("None.")).toBeInTheDocument();
+  });
 });

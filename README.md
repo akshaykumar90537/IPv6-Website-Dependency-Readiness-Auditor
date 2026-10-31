@@ -9,6 +9,7 @@
 [![Playwright](https://img.shields.io/badge/Playwright-Chromium%20CDP-2EAD33?logo=playwright&logoColor=white)](https://playwright.dev/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.4-38B2AC?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-SQLAlchemy%202.0-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![YouTube Demo](https://img.shields.io/badge/YouTube-Watch%20Demo%20Video-red?logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=GYqo8dCFDYA)
 [![Tests](https://img.shields.io/badge/Tests-220%20Passing-brightgreen?logo=pytest&logoColor=white)](file:///d:/Full%20Stack%20Projects/A3-PS027-TC039/README.md#testing--quality-assurance)
 [![AIORI-3](https://img.shields.io/badge/AIORI--3-PS--027-orange?logo=target&logoColor=white)](#license--acknowledgments)
 
@@ -18,17 +19,37 @@
 
 ---
 
+## 📺 Project Working Demonstration Video
+
+> [!IMPORTANT]
+> ### 🎥 Live Project Walkthrough & Evaluation Video
+> **A complete video walkthrough demonstrating the working IPv6 Website & Dependency Readiness Auditor is available on YouTube:**
+> 
+> 👉 **[Watch Full Working Demo on YouTube: https://www.youtube.com/watch?v=GYqo8dCFDYA](https://www.youtube.com/watch?v=GYqo8dCFDYA)**
+>
+> <div align="center">
+> 
+> [![Watch the Working Demo Video](https://img.youtube.com/vi/GYqo8dCFDYA/hqdefault.jpg)](https://www.youtube.com/watch?v=GYqo8dCFDYA)
+> 
+> *Click the thumbnail above to watch the end-to-end demonstration covering real-time scanning, Chrome DevTools Protocol instrumentation, interactive ReactFlow dependency graph visualization, multi-stage dual-stack socket probing (`DNS -> TCP -> TLS -> HTTP`), and batch audit reporting.*
+> 
+> </div>
+
+---
+
 ## Project Information
 
 - **Hackathon**: AIORI-3 (All India Open Research Initiative)
 - **Problem Statement**: **PS-027** — *Internet Measurement / IPv6 Readiness Auditor*
 - **Team Code**: **A3-PS027-TC039**
 - **Lead Developer**: Akshay Kumar ([akshaykumar90537@gmail.com](mailto:akshaykumar90537@gmail.com))
+- **Demo Video**: [YouTube Demonstration (https://www.youtube.com/watch?v=GYqo8dCFDYA)](https://www.youtube.com/watch?v=GYqo8dCFDYA)
 
 ---
 
 ## Table of Contents
 
+- [Project Working Demonstration Video](#-project-working-demonstration-video)
 - [Overview & Problem Statement](#overview--problem-statement)
 - [System Architecture](#system-architecture)
   - [Architectural Overview Diagram](#architectural-overview-diagram)

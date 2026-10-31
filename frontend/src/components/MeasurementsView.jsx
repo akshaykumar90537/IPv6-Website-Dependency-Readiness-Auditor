@@ -9,6 +9,10 @@ function Row({ label, value }) {
 
 export default function MeasurementsView({ context }) {
   if (!context) return <div className="text-base text-muted p-6 border border-border rounded-xl bg-surface shadow-xs leading-relaxed">No measurement context recorded yet.</div>;
+
+  const rawWarnings = context.warnings;
+  const warningsList = Array.isArray(rawWarnings) ? rawWarnings : [];
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
       <div className="border border-border rounded-xl bg-surface p-6 shadow-xs">
@@ -35,9 +39,9 @@ export default function MeasurementsView({ context }) {
       </div>
       <div className="border border-border rounded-xl bg-surface p-6 shadow-xs">
         <div className="text-xs font-bold text-muted mb-3 uppercase tracking-wider">Warnings</div>
-        {(context.warnings || []).length === 0
+        {warningsList.length === 0
           ? <div className="text-base text-muted">None.</div>
-          : <ul className="text-base list-disc pl-5 space-y-1.5 text-muted">{context.warnings.map((w, i) => <li key={i}>{w}</li>)}</ul>}
+          : <ul className="text-base list-disc pl-5 space-y-1.5 text-muted">{warningsList.map((w, i) => <li key={i}>{w}</li>)}</ul>}
       </div>
     </div>
   );

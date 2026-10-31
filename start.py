@@ -64,7 +64,7 @@ def free_port(port):
                 if len(parts) >= 5 and f":{port}" in parts[1] and parts[3] == "LISTENING":
                     pids.add(parts[4])
             for pid in pids:
-                subprocess.run(f"taskkill /F /PID {pid}", shell=True, capture_output=True)
+                subprocess.run(f"taskkill /F /T /PID {pid}", shell=True, capture_output=True)
         except Exception:
             pass
 
